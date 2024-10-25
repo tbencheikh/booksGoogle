@@ -1,36 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useState } from 'react';
+import './App.css';
+import BookDetail from './components/BookDetail';
+import BookList from './components/BookList';
+import Footer from './components/Footer';
+import NavBar from './components/NavBar';
+import { Book, VolumeInfo } from './interfaces/booktypes';
+import useBooks from './services/useBooks';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedBook, setSelectedBook] = useState<VolumeInfo | null>(null);
+  const { books, loading, setSearchTerm } = useBooks('fiction');
+
+  function handleSeeMore(book: Book) {
+    setSelectedBook(book.volumeInfo);
+  }
+  function handleCloeModal() {
+    setSelectedBook(null);
+  }
+
+  function handleSearch(query: string) {
+    setSearchTerm(query);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+      <NavBar onSearch={handleSearch} />
+      {loading ? (
+        <p className="placeholder-glow display-3 text-secondary">
+          <span className="placeholder col-12">Loading</span>
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      ) : (
+        <BookList books={books} onSeeMore={handleSeeMore}></BookList>
+      )}
+
+      <Footer />
+      {selectedBook && (
+        <BookDetail book={selectedBook} onClose={handleCloeModal}></BookDetail>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
