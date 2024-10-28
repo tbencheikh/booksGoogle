@@ -7,6 +7,7 @@ const BASE_URL = 'https://www.googleapis.com/books/v1';
 async function fetchBooks(
   query: string,
   controller: AbortController,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any[]> {
   try {
     const response = await fetch(`${BASE_URL}/volumes?q=${query}`, {

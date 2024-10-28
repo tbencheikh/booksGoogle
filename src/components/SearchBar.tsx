@@ -6,6 +6,7 @@ import { SearchBarProps } from '../interfaces/booktypes';
 function SearchBar({ onSearch }: SearchBarProps) {
   const [SearchTerm, setSearchTerm] = useState('');
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function handleSubmit(event: any) {
     event.preventDefault();
     onSearch(SearchTerm);
